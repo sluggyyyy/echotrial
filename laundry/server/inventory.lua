@@ -96,28 +96,28 @@ RegisterCommand('checkinventory', function(source, args)
     })
 end, false)
 
-RegisterNetEvent('laundryinventory:addItem')
-AddEventHandler('laundryinventory:addItem', function(item, amount)
+RegisterNetEvent('laundry:addItem')
+AddEventHandler('laundry:addItem', function(item, amount)
     local source = source
     addItem(source, item, amount)
 end)
 
-RegisterNetEvent('laundryinventory:removeItem')
-AddEventHandler('laundryinventory:removeItem', function(item, amount)
+RegisterNetEvent('laundry:removeItem')
+AddEventHandler('laundry:removeItem', function(item, amount)
     local source = source            
-    return removeItem(source, item, amount)
+    removeItem(source, item, amount)
 end)
 
-RegisterNetEvent('laundryinventory:hasItem')
-AddEventHandler('laundryinventory:hasItem', function(item, amount)
+RegisterNetEvent('laundry:hasItem')
+AddEventHandler('laundry:hasItem', function(item, amount)
     local source = source
-    return hasItem(source, item, amount)
+    hasItem(source, item, amount)
 end)
 
-RegisterNetEvent('laundryinventory:getInventory')
-AddEventHandler('laundryinventory:getInventory', function()
+RegisterNetEvent('laundry:getInventory')
+AddEventHandler('laundry:getInventory', function()
     local source = source
-    return getPlayerInventory(source)
+    getPlayerInventory(source)
 end)
 
 exports('getPlayerInventory', getPlayerInventory)

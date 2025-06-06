@@ -5,9 +5,11 @@ description 'Laundry System'
 version '1.0.0'
 
 client_scripts {
-    'client.lua'
+    'client/client.lua',
+    'client/initmachines.lua'
 }
 
 server_scripts {
-    'server.lua'
+    'server/inventory.lua',
+    'server/processlaundry.lua'
 }
