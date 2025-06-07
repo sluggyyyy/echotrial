@@ -10,13 +10,13 @@ local function getPlayerInventory(source)
     local playerId = getPlayerIdentifier(source)
     if not playerInventories[playerId] then
         playerInventories[playerId] = {
-            laundryDetergent = 0,
-            fabricSoftener = 0, 
-            cashStack = 0,
+            laundryDetergent = 1,
+            fabricSoftener = 1, 
+            cashStack = 2,
             cashRoll = 0,
             looseNotes = 0,
-            greenPigment = 0, -- Special Item from house robberies that stops the money from getting bleached :)
-            dirtyClothes = 0,
+            greenPigment = 1, -- Special Item from house robberies that stops the money from getting bleached :)
+            dirtyClothes = 1,
             cleanCash = 0
         }
     end
@@ -89,11 +89,15 @@ RegisterCommand('checkinventory', function(source, args)
 
     local inventory = getPlayerInventory(source)
 
-    local inventoryStr = json.encode(inventory)
-
     TriggerClientEvent('chat:addMessage', source, {
-        args = {string.format('Inventory: %s', inventoryStr)}
+        args = {'=== INVENTORY ==='}
     })
+    
+    for item, amount in pairs(inventory) do
+        TriggerClientEvent('chat:addMessage', source, {
+            args = {string.format('%s: %d', item, amount)}
+        })
+    end
 end, false)
 
 RegisterNetEvent('laundry:addItem')
