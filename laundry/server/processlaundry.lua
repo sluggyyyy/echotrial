@@ -9,6 +9,7 @@ AddEventHandler('laundry:processDirtyClothes', function(machineIndex)
         exports['laundry']:removeItem(playerId, 'dirtyClothes', 1)
 
         TriggerClientEvent('laundry:showmessage', playerId, 'Added dirty clothes')
+        TriggerClientEvent('laundry:startMoneyAnimation', playerId, machine)
     else
         TriggerClientEvent('laundry:showmessage', playerId, 'You have no dirty clothes!')
     end
@@ -52,9 +53,11 @@ AddEventHandler('laundry:processCash', function(machineIndex)
         
         Wait(totalCount * 6000)
 
-        payout = ((cashStackCount * 675) + (cashRollCount * 325) + (looseNotesCount * 80))
+        payout = ((cashStackCount * 700) + (cashRollCount * 350) + (looseNotesCount * 50))
 
         exports['laundry']:addItem(playerId, 'cleanCash', payout)
+
+        TriggerClientEvent('laundry:stopMoneyAnimation', playerId, machine)
 
         TriggerClientEvent('laundry:showMessage', playerId, 'Washing finished. Total cash washed: ' .. payout .. '.')
         TriggerClientEvent('laundry:openMachine', playerId, machine)
