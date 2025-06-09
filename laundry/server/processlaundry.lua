@@ -1,3 +1,15 @@
+local function TriggerEventNearby(eventName, playerId, radius, ...)
+    local playerCoords = GetEntityCoords(GetPlayerPed(playerId))
+    local players = GetPlayers()
+    for _, nearbyPlayer in ipairs(players) do
+        local nearbyCoords = GetEntityCoords(GetPlayerPed(nearbyPlayer))
+        local distance = #(playerCoords - nearbyCoords)
+        if distance <= radius then
+            TriggerClientEvent(eventName, nearbyPlayer, ...)
+        end
+    end
+end
+
 RegisterNetEvent('laundry:processDirtyClothes')
 AddEventHandler('laundry:processDirtyClothes', function(machineIndex)
     local playerId = source
@@ -9,18 +21,18 @@ AddEventHandler('laundry:processDirtyClothes', function(machineIndex)
         exports['laundry']:removeItem(playerId, 'dirtyClothes', 1)
 
         TriggerClientEvent('laundry:showmessage', playerId, 'Added dirty clothes')
-        TriggerClientEvent('laundry:startMoneyAnimation', playerId, machine)
+        TriggerEventNearby('laundry:startMoneyAnimation', playerId, 50.0, machine)
     else
         TriggerClientEvent('laundry:showmessage', playerId, 'You have no dirty clothes!')
     end
 
-    TriggerClientEvent('laundry:closeMachine', playerId, machine)
+    TriggerEventNearby('laundry:closeMachine', playerId, 50.0, machine)
 end)
 
 RegisterNetEvent('laundry:closeMachineRequest')
 AddEventHandler('laundry:closeMachineRequest', function(machineIndex)
     local playerId = source
-    TriggerClientEvent('laundry:closeMachine', playerId, machineIndex)
+    TriggerEventNearby('laundry:closeMachine', playerId, 50.0, machineIndex)
 end)
 
 RegisterNetEvent('laundry:processCash')
@@ -57,10 +69,10 @@ AddEventHandler('laundry:processCash', function(machineIndex)
 
         exports['laundry']:addItem(playerId, 'cleanCash', payout)
 
-        TriggerClientEvent('laundry:stopMoneyAnimation', playerId, machine)
+        TriggerEventNearby('laundry:stopMoneyAnimation', playerId, 50.0, machine)
 
         TriggerClientEvent('laundry:showMessage', playerId, 'Washing finished. Total cash washed: ' .. payout .. '.')
-        TriggerClientEvent('laundry:openMachine', playerId, machine)
+        TriggerEventNearby('laundry:openMachine', playerId, 50.0, machine)
     else
         TriggerClientEvent('laundry:showMessage', playerId, 'You are missing something...')
     end
