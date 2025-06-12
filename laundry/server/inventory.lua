@@ -1,47 +1,55 @@
+
 local playerInventories = {}
 
--- Using FiveM license instead of SteamID to avoid last time's issue <3
 local function getPlayerIdentifier(source)
     local identifier = GetPlayerIdentifier(source, 0)
+    
     return identifier or tostring(source)
 end
 
 local function getPlayerInventory(source)
     local playerId = getPlayerIdentifier(source)
+    
     if not playerInventories[playerId] then
         playerInventories[playerId] = {
             laundryDetergent = 1,
-            fabricSoftener = 1, 
+            fabricSoftener = 1,
             cashStack = 2,
             cashRoll = 0,
             looseNotes = 0,
-            greenPigment = 1, -- Special Item from house robberies that stops the money from getting bleached :)
+            greenPigment = 1,
             dirtyClothes = 1,
             cleanCash = 0
         }
     end
+    
     return playerInventories[playerId]
 end
 
 local function getAmount(source, item)
     local inventory = getPlayerInventory(source)
+    
     if inventory[item] ~= nil then
         return inventory[item]
     end
+    
     return nil
 end
 
 local function addItem(source, item, amount)
     local inventory = getPlayerInventory(source)
+    
     if inventory[item] ~= nil then
         inventory[item] = inventory[item] + amount
         return true
     end
+    
     return false
 end
 
 local function removeItem(source, item, amount)
     local inventory = getPlayerInventory(source)
+    
     if inventory[item] ~= nil and inventory[item] >= amount then
         if amount == -1 then
             inventory[item] = 0
@@ -50,11 +58,13 @@ local function removeItem(source, item, amount)
         end
         return true
     end
+    
     return false
 end
 
 local function hasItem(source, item, amount)
     local inventory = getPlayerInventory(source)
+    
     return inventory[item] ~= nil and inventory[item] >= amount
 end
 
@@ -100,6 +110,7 @@ RegisterCommand('checkinventory', function(source, args)
     end
 end, false)
 
+
 RegisterNetEvent('laundry:addItem')
 AddEventHandler('laundry:addItem', function(item, amount)
     local source = source
@@ -108,7 +119,7 @@ end)
 
 RegisterNetEvent('laundry:removeItem')
 AddEventHandler('laundry:removeItem', function(item, amount)
-    local source = source            
+    local source = source
     removeItem(source, item, amount)
 end)
 
